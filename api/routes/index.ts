@@ -1,9 +1,9 @@
-import hello from './modules/hello'
+import trashes from './modules/trashes'
 
 import { Server } from '~/types'
 
 const routes: Server.IRoute[] = [
-  hello
+  trashes
 ]
 
 export default routes

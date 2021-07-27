@@ -1,6 +1,6 @@
-import { Schema, model } from 'mongoose'
+import mongoose from 'mongoose'
 
-const trashSchema = new Schema({
+const trashSchema = new mongoose.Schema({
   type: { type: String, required: true },
   address: { type: String, required: true },
   image: { type: String, required: true },
@@ -10,4 +10,5 @@ const trashSchema = new Schema({
   timestamps: true
 })
 
-export default model('Trashes', trashSchema)
+
+export default mongoose.models.Trashes || mongoose.model('Trashes', trashSchema)
