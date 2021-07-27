@@ -1,24 +1,22 @@
-import express from 'express'
+import express, { Application } from 'express'
+import mongoose from 'mongoose'
+
 import routes from './routes/'
-import { IRoute } from '~/api/types'
+import { Server } from '~/types'
 
-class Application {
-  private readonly _app : express.Application;
-  constructor () {
-    this._app = express()
-  }
+const URI = process.env.DB_URI || 'ERROR'
 
-  public init (): void {
-    // add routes
-    routes.forEach((route: IRoute) => this.app.use(`/${route.name}`, route.router))
-  }
+mongoose.connect(URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
 
-  public get app () {
-    return this._app
-  }
-}
+const app: Application = express()
 
-const application = new Application()
-application.init()
+//  Body Parser
+app.use(express.json())
 
-export default application.app
+//  Router
+routes.forEach((route: Server.IRoute) => app.use(`/${route.name}`, route.router))
+
+export default app

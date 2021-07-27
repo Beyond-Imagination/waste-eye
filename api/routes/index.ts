@@ -1,8 +1,9 @@
-import { IRoute } from '../types'
-import hello from './modules/hello'
+import trashes from './modules/trashes'
 
-const routes: IRoute[] = [
-  hello
+import { Server } from '~/types'
+
+const routes: Server.IRoute[] = [
+  trashes
 ]
 
 export default routes
