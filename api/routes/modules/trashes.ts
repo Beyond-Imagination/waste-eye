@@ -3,9 +3,10 @@ import { Trashes } from '../../db/'
 
 const router = Router()
 
+const limit:number = 5
+
 router.get('/', async (req, res) => {
   let page:number = Number(req.query.page || 1)
-  const limit:number = 5
 
   if (page <= 0) {
     page = 1
@@ -23,6 +24,32 @@ router.get('/', async (req, res) => {
       error: null,
       message: 'success',
       result
+    })
+  } catch (error) {
+    res
+      .status(400)
+      .json({
+        error,
+        message: error.message,
+        result: null
+      })
+  }
+})
+
+router.get('/size', async (_, res) => {
+  try {
+    const size = await Trashes.countDocuments()
+
+    const pages = size / limit
+
+    res.json({
+      error: null,
+      message: 'success',
+      result: {
+        size,
+        limit,
+        pages
+      }
     })
   } catch (error) {
     res
