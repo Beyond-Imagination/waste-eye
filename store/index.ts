@@ -3,7 +3,8 @@ import { API } from '~/types'
 
 export interface State {
   sizeInfo: API.Size,
-  items: API.Trash[]
+  items: API.Trash[],
+  fetched: boolean
 }
 
 export interface Params {
@@ -16,7 +17,8 @@ export const state = () => ({
     pages: 0,
     limit: 0
   },
-  items: []
+  items: [],
+  fetched: false
 })
 
 export type RootState = ReturnType<typeof state>
@@ -26,6 +28,10 @@ export const mutations: MutationTree<RootState> = {
     state.sizeInfo = sizeInfo
   },
   UPDATE_ITEMS (state: State, items: API.Trash[]) {
+    if (!state.fetched) {
+      state.fetched = true
+      state.items = []
+    }
     state.items.push(...items)
   }
 }
@@ -45,5 +51,6 @@ export const actions: ActionTree<RootState, RootState> = {
 
 export const getters: GetterTree<RootState, RootState> = {
   sizeInfo: state => state.sizeInfo,
-  items: state => state.items
+  items: state => Array.from(new Set(state.items).values()),
+  ready: state => state.fetched
 }

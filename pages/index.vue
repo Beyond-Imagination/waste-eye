@@ -1,58 +1,68 @@
 <template>
   <v-row>
-    <v-col>
-      <v-card
-        flat
-        outlined
+    <template
+      v-for="(item, index) in items"
+    >
+      <v-col
+        :key="index"
+        cols="4"
       >
-        <v-card-title>
-          Hello World!
-        </v-card-title>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            elevation="0"
-            color="primary"
-            @click="onClickHello"
-          >
-            Hello World
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
+        <item-card
+          :item="item"
+        />
+      </v-col>
+    </template>
   </v-row>
 </template>
 
 <script lang="ts">
 import {
   defineComponent,
-  useContext,
   useStore,
   onMounted,
   computed
 } from '@nuxtjs/composition-api'
+import ItemCard from '~/components/molecules/ItemCard.vue'
+import { API } from '~/types'
 
 export default defineComponent({
   name: 'Index',
+  components: {
+    ItemCard
+  },
   setup () {
-    const context = useContext()
     const store = useStore()
-    const onClickHello = async () => {
-      const { result } = await context.$axios.$get('/api/trashes')
-      console.log(result)
-    }
 
-    onMounted(() => {
-      store.dispatch('fetchSize')
+    onMounted(async () => {
+      await Promise.all([
+        store.dispatch('fetchSize'),
+        store.dispatch('fetchItems')
+      ])
     })
 
-    const sizeInfo = computed(() => store.getters.sizeInfo)
+    const sizeInfo = computed<API.Size>(() => store.getters.sizeInfo)
+    const items = computed(() => store.getters.items)
+    const ready = computed<boolean>(() => store.getters.ready)
 
     return {
-      onClickHello,
-      sizeInfo
+      sizeInfo,
+      items,
+      ready
     }
   }
 })
 
 </script>
+
+<style lang="scss">
+.bg-img {
+  position: relative;
+
+  .description {
+    position: absolute;
+    background-color: rgba(16, 16, 16, 0.2);
+    width: 100%;
+    bottom: 0;
+  }
+}
+</style>
