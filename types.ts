@@ -22,4 +22,10 @@ export declare namespace API {
     createdAt: Date
     updatedAt: Date
   }
+
+  interface Size {
+    size: number,
+    pages: number,
+    limit: number
+  }
 }

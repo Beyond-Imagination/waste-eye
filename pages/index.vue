@@ -24,19 +24,33 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, useContext } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  useContext,
+  useStore,
+  onMounted,
+  computed
+} from '@nuxtjs/composition-api'
 
 export default defineComponent({
   name: 'Index',
   setup () {
     const context = useContext()
+    const store = useStore()
     const onClickHello = async () => {
       const { result } = await context.$axios.$get('/api/trashes')
       console.log(result)
     }
 
+    onMounted(() => {
+      store.dispatch('fetchSize')
+    })
+
+    const sizeInfo = computed(() => store.getters.sizeInfo)
+
     return {
-      onClickHello
+      onClickHello,
+      sizeInfo
     }
   }
 })
