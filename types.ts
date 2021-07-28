@@ -8,7 +8,14 @@ export declare namespace Server {
 }
 
 export declare namespace API {
+  interface Result {
+    error: string | null,
+    message: string | null,
+    result: any | null
+  }
+
   interface Trash {
+    _id?: string
     type: string
     address: string
     image: string

@@ -31,8 +31,8 @@ export default defineComponent({
   setup () {
     const context = useContext()
     const onClickHello = async () => {
-      const hello = await context.$axios.$get('/api/hello')
-      console.log(hello)
+      const { result } = await context.$axios.$get('/api/trashes')
+      console.log(result)
     }
 
     return {

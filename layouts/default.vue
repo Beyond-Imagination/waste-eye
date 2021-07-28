@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <app-bar />
     <v-main>
       <v-container>
         <Nuxt />
@@ -9,6 +10,11 @@
 </template>
 
 <script>
-export default {
-}
+import { defineComponent } from '@nuxtjs/composition-api'
+import AppBar from '~/components/atoms/AppBar'
+export default defineComponent({
+  components: {
+    AppBar
+  }
+})
 </script>

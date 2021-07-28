@@ -10,5 +10,4 @@ const trashSchema = new mongoose.Schema({
   timestamps: true
 })
 
-
 export default mongoose.models.Trashes || mongoose.model('Trashes', trashSchema)
