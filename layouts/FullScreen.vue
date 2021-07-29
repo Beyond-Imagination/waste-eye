@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'map'
+  name: 'FullScreen'
 }
 </script>
 
