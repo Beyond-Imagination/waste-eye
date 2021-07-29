@@ -20,6 +20,7 @@
     "moment": "^2.29.1",
     "mongoose": "^5.13.3",
     "nuxt": "^2.15.7",
+    "vue-naver-maps": "^0.14.2",
     "vuetify": "^2.5.5"
   },
   "devDependencies": {

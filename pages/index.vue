@@ -1,56 +1,48 @@
 <template>
-  <v-row class="mt-1">
-    <template
-      v-for="(item, index) in items"
-    >
-      <v-col
-        :key="index"
-        cols="12"
-        sm="6"
-        md="4"
-        class="d-flex align-center justify-center"
-      >
-        <item-card
-          :item="item"
-        />
-      </v-col>
-    </template>
-  </v-row>
+  <client-only>
+    <naver-maps
+      ref="map"
+      :map-options="mapOptions"
+      class="full-page"
+    />
+  </client-only>
 </template>
 
 <script lang="ts">
 import {
-  defineComponent,
-  useStore,
-  onMounted,
-  computed
+  defineComponent, ref, onMounted
 } from '@nuxtjs/composition-api'
-import ItemCard from '~/components/atoms/ItemCard.vue'
-import { API } from '~/types'
+
+function getGeolocation (): Promise<GeolocationPosition> {
+  return new Promise((resolve, reject) => navigator.geolocation.getCurrentPosition(resolve, reject))
+}
 
 export default defineComponent({
   name: 'Index',
-  components: {
-    ItemCard
-  },
+  layout: 'map',
   setup () {
-    const store = useStore()
-
-    onMounted(async () => {
-      await Promise.all([
-        store.dispatch('fetchSize'),
-        store.dispatch('fetchItems')
-      ])
+    const map = ref()
+    const mapOptions = ref({
+      lat: 37,
+      lng: 127,
+      zoom: 15,
+      zoomControl: true,
+      zoomControlOptions: { position: 'TOP_LEFT' }
     })
 
-    const sizeInfo = computed<API.Size>(() => store.getters.sizeInfo)
-    const items = computed<API.Trash[]>(() => store.getters.items)
-    const ready = computed<boolean>(() => store.getters.ready)
+    const setCenter = (lat, lng) => map.value.setCenter(new naver.maps.LatLng(lat, lng))
+
+    onMounted(async () => {
+      const geo = await getGeolocation()
+      mapOptions.value.lng = geo.coords.longitude
+      mapOptions.value.lat = geo.coords.latitude
+
+      setCenter(geo.coords.latitude, geo.coords.longitude)
+    })
 
     return {
-      sizeInfo,
-      items,
-      ready
+      map,
+      mapOptions
     }
   }
 })
@@ -58,14 +50,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.bg-img {
-  position: relative;
-
-  .description {
-    position: absolute;
-    background-color: rgba(16, 16, 16, 0.2);
-    width: 100%;
-    bottom: 0;
-  }
+.full-page {
+  width: 100%;
+  height: 100%;
 }
 </style>

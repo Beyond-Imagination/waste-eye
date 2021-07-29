@@ -11029,6 +11029,13 @@ vue-meta@^2.4.0:
   dependencies:
     deepmerge "^4.2.2"
 
+vue-naver-maps@^0.14.2:
+  version "0.14.2"
+  resolved "https://registry.yarnpkg.com/vue-naver-maps/-/vue-naver-maps-0.14.2.tgz#5c44a02507a9401b94288773cbf7e2719800d080"
+  integrity sha512-vjTYxCGW+PD1gYioqDLtJQbmEZta7R4StaKaEv92mfgQxq5W6lyuiEW+jHhuBRNXy43YhegqVcxH+zHO/yMggQ==
+  dependencies:
+    vue "^2.6.12"
+
 vue-no-ssr@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/vue-no-ssr/-/vue-no-ssr-1.1.1.tgz#875f3be6fb0ae41568a837f3ac1a80eaa137b998"
