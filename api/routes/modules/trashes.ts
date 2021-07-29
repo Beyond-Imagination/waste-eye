@@ -5,6 +5,39 @@ const router = Router()
 
 const limit:number = 5
 
+router.get('/:latitude/:longitude', async (req, res) => {
+  const { latitude, longitude } = req.params
+  const radius = req.query.radius || 500
+
+  try {
+    const result = await Trashes.find({
+      coordinates: {
+        $near: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [longitude, latitude]
+          },
+          $maxDistance: radius
+        }
+      }
+    })
+
+    res.json({
+      error: null,
+      message: 'success',
+      result
+    })
+  } catch (error) {
+    res
+      .status(400)
+      .json({
+        error,
+        message: error.message,
+        result: null
+      })
+  }
+})
+
 router.get('/', async (req, res) => {
   let page:number = Number(req.query.page || 1)
 
