@@ -90,6 +90,26 @@ router.post('/', async (req, res) => {
   }
 })
 
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params
+  try {
+    const result = await Trashes.findByIdAndDelete(id)
+    res.json({
+      error: null,
+      message: 'success',
+      result
+    })
+  } catch (error) {
+    res
+      .status(400)
+      .json({
+        error,
+        message: error.message,
+        result: null
+      })
+  }
+})
+
 export default {
   name: 'trashes',
   router

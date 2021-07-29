@@ -2,7 +2,10 @@
   <v-app>
     <app-bar />
     <v-main>
-      <v-container>
+      <v-container
+        class="mx-auto"
+        style="max-width: 1200px"
+      >
         <Nuxt />
       </v-container>
     </v-main>

@@ -6,6 +6,7 @@
       <v-col
         :key="index"
         cols="4"
+        class="d-flex align-center"
       >
         <item-card
           :item="item"
@@ -22,7 +23,7 @@ import {
   onMounted,
   computed
 } from '@nuxtjs/composition-api'
-import ItemCard from '~/components/molecules/ItemCard.vue'
+import ItemCard from '~/components/atoms/ItemCard.vue'
 import { API } from '~/types'
 
 export default defineComponent({
@@ -41,7 +42,7 @@ export default defineComponent({
     })
 
     const sizeInfo = computed<API.Size>(() => store.getters.sizeInfo)
-    const items = computed(() => store.getters.items)
+    const items = computed<API.Trash>(() => store.getters.items)
     const ready = computed<boolean>(() => store.getters.ready)
 
     return {
