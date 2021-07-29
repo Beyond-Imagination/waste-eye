@@ -14,11 +14,30 @@ export declare namespace API {
     result: any | null
   }
 
-  interface Trash {
-    _id?: string
+  interface ImageInfo {
+    fileName: string
     type: string
+  }
+
+  interface LocationInfo {
+    coordinates: {
+      latitude: string
+      longitude: string
+    },
     address: string
+    guName: string
+  }
+
+  interface Item extends ImageInfo, LocationInfo {
+  }
+
+  interface Trash extends ImageInfo {
+    _id?: string
     image: string
+    thumbnail: string
+    coordinates: number[]
+    address: string
+    guName: string
     createdAt: Date
     updatedAt: Date
   }

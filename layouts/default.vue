@@ -16,7 +16,7 @@
 <script>
 import { defineComponent } from '@nuxtjs/composition-api'
 import AppBar from '~/components/atoms/AppBar'
-import PageBar from '@/components/molecules/PageBar'
+import PageBar from '~/components/molecules/PageBar'
 
 export default defineComponent({
   components: {
