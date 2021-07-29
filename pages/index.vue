@@ -1,12 +1,14 @@
 <template>
-  <v-row>
+  <v-row class="mt-1">
     <template
       v-for="(item, index) in items"
     >
       <v-col
         :key="index"
-        cols="4"
-        class="d-flex align-center"
+        cols="12"
+        sm="6"
+        md="4"
+        class="d-flex align-center justify-center"
       >
         <item-card
           :item="item"
@@ -42,7 +44,7 @@ export default defineComponent({
     })
 
     const sizeInfo = computed<API.Size>(() => store.getters.sizeInfo)
-    const items = computed<API.Trash>(() => store.getters.items)
+    const items = computed<API.Trash[]>(() => store.getters.items)
     const ready = computed<boolean>(() => store.getters.ready)
 
     return {

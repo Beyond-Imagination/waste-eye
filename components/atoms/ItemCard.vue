@@ -3,9 +3,9 @@
     <template #default="{ hover }">
       <v-card
         :elevation="hover ? 4: 0"
-        dark
-        outlined
         class="transition-ease-in-out"
+        :class="{ 'rounded-lg': !hover }"
+        dark
         @click="onClickItem"
       >
         <v-img
@@ -26,6 +26,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from '@nuxtjs/composition-api'
 import { API } from '~/types'
+
 export default defineComponent({
   name: 'ItemCard',
   props: {
