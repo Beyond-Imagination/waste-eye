@@ -3,8 +3,8 @@ import colors from 'vuetify/es5/util/colors'
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - waste-eye',
-    title: 'waste-eye',
+    titleTemplate: '%s - Wasteye',
+    title: 'Wasteye',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -54,7 +54,8 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    'vuetify-dialog/nuxt'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -84,10 +85,16 @@ export default {
         light: {
           primary: '#118434',
           secondary: '#1D5A4F',
-          third: '#204B57'
+          third: '#204B57',
+          naver: '#2db400'
         }
       }
     }
+  },
+
+  //  Vuetify Dialog: https://github.com/yariksav/vuetify-dialog#readme
+  vuetifyDialog: {
+    property: '$dialog'
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

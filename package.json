@@ -21,7 +21,8 @@
     "mongoose": "^5.13.3",
     "nuxt": "^2.15.7",
     "vue-naver-maps": "^0.14.2",
-    "vuetify": "^2.5.5"
+    "vuetify": "^2.5.5",
+    "vuetify-dialog": "^2.0.16"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.14.7",
