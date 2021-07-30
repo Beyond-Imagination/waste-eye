@@ -4,7 +4,7 @@
     <v-main>
       <v-container
         class="mx-auto"
-        style="max-width: 1200px"
+        style="max-width: 800px"
       >
         <Nuxt />
       </v-container>

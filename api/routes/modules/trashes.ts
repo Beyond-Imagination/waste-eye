@@ -3,9 +3,31 @@ import { Trashes } from '../../db/'
 
 const router = Router()
 
-const limit:number = 20
+const _limit:number = 20
 
-router.get('/:latitude/:longitude', async (req, res) => {
+router.get('/:id', async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const result = await Trashes.findById(id)
+
+    res.json({
+      error: null,
+      message: 'success',
+      result
+    })
+  } catch (error) {
+    res
+      .status(400)
+      .json({
+        error,
+        message: error.message,
+        result: null
+      })
+  }
+})
+
+router.get('/coordinates/:latitude/:longitude', async (req, res) => {
   const { latitude, longitude } = req.params
   const radius = req.query.radius || 500
 
@@ -40,18 +62,21 @@ router.get('/:latitude/:longitude', async (req, res) => {
 
 router.get('/', async (req, res) => {
   let page:number = Number(req.query.page || 1)
+  const limit:number = Number(req.query.limit || _limit)
+  const type = req.query.type || null
 
   if (page <= 0) {
     page = 1
   }
 
   try {
-    const result = await Trashes
-      .find({}, null, {
-        skip: (page - 1) * limit,
-        limit
-      })
-      .sort({ createdAt: -1 })
+    let query = Trashes.find().skip((page - 1) * limit).limit(limit).sort({ createdAt: -1 })
+
+    if (type) {
+      query = query.where('type').equals(type)
+    }
+
+    const result = await query.find()
 
     res.json({
       error: null,
@@ -69,7 +94,8 @@ router.get('/', async (req, res) => {
   }
 })
 
-router.get('/size', async (_, res) => {
+router.get('/size', async (req, res) => {
+  const limit:number = Number(req.query.limit || _limit)
   try {
     const size = await Trashes.countDocuments()
 

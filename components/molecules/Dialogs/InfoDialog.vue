@@ -25,9 +25,9 @@
           <v-card-title class="justify-center">
             {{ selected.type }}
           </v-card-title>
-          <v-card-subtitle class="text-center">
+          <v-card-subtitle class="text-center pb-0">
             <p class="mb-0">
-              발견일시 {{ formatDate(selected.createdAt) }}
+              발견일시 {{ dateFormat(selected.createdAt) }}
             </p>
             <p class="mb-0">
               {{ selected.address }}
@@ -37,13 +37,24 @@
             </p>
           </v-card-subtitle>
         </v-col>
-        <v-col cols="12">
+        <v-col v-if="false" cols="12" sm="6">
           <v-btn
             text
             block
             @click="onClickOpenNaverMap"
           >
-            네이버 지도에서 열기
+            지도에서 보기
+          </v-btn>
+        </v-col>
+        <v-col cols="12" sm="12">
+          <v-btn
+            text
+            block
+            x-large
+            color="primary"
+            @click="onClickOpenDetail"
+          >
+            자세히 보기
           </v-btn>
         </v-col>
       </v-row>
@@ -67,9 +78,10 @@ import {
   PropType,
   SetupContext
 } from '@nuxtjs/composition-api'
-import moment from 'moment'
+
 import { API } from '~/types'
 import useModel from '~/compositions/useModel'
+import useFormat from '~/compositions/useFormat'
 
 export default defineComponent({
   name: 'InfoDialog',
@@ -80,17 +92,15 @@ export default defineComponent({
     }
   },
   setup (props: Data, context: SetupContext) {
-    const formatDate = (date: Date) => moment(date).format('YYYY년 MM월 DD일')
-
-    const onClickOpenNaverMap = () => {
-      context.emit('onClickNaverMap', props.selected)
-    }
-
     const model = useModel<boolean>(context)
+    const { dateFormat } = useFormat()
+    const onClickOpenDetail = () => context.emit('onClickDetail', props.selected)
+    const onClickOpenNaverMap = () => context.emit('onClickNaverMap', props.selected)
 
     return {
       model,
-      formatDate,
+      dateFormat,
+      onClickOpenDetail,
       onClickOpenNaverMap
     }
   }

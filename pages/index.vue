@@ -21,6 +21,7 @@
         v-model="models.infoDialog"
         :selected="selected"
         @onClickNaverMap="onClickOpenNaverMap"
+        @onClickDetail="onClickDetail"
       />
       <v-btn
         fab
@@ -41,8 +42,10 @@
 <script lang="ts">
 import {
   ref,
+  reactive,
   useContext,
-  defineComponent, reactive
+  useRouter,
+  defineComponent
 } from '@nuxtjs/composition-api'
 import InfoDialog from '~/components/molecules/Dialogs/InfoDialog.vue'
 
@@ -60,6 +63,8 @@ export default defineComponent({
   layout: 'FullScreen',
   setup () {
     const context = useContext()
+    const router = useRouter()
+
     const maps = ref()
     const selected = ref<API.Trash | null>(null)
     const mapOptions = ref({
@@ -80,7 +85,7 @@ export default defineComponent({
     // const setZoomLevel = (level: number) => maps.value.setZoom(level, false)
 
     const updateItem = async (lat: number, lng: number) => {
-      const { result } = await context.$axios.$get(`/api/trashes/${lat}/${lng}?radius=3000`)
+      const { result } = await context.$axios.$get(`/api/trashes/coordinates/${lat}/${lng}?radius=3000`)
       items.value = result
       if (result.length === 0) {
         // @ts-ignore
@@ -122,8 +127,11 @@ export default defineComponent({
       window.open(searchUrl)
     }
 
-    const onClickSearch = () => {
+    const onClickDetail = (item: API.Trash) => {
+      router.push(`/trash/${item._id}`)
+    }
 
+    const onClickSearch = () => {
     }
 
     return {
@@ -136,6 +144,7 @@ export default defineComponent({
       onClickMarker,
       onClickMap,
       onClickOpenNaverMap,
+      onClickDetail,
       onClickSearch
     }
   },
