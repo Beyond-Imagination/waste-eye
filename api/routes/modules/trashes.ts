@@ -64,6 +64,7 @@ router.get('/', async (req, res) => {
   let page:number = Number(req.query.page || 1)
   const limit:number = Number(req.query.limit || _limit)
   const type = req.query.type || null
+  const guName = req.query.guName || null
 
   if (page <= 0) {
     page = 1
@@ -74,6 +75,10 @@ router.get('/', async (req, res) => {
 
     if (type) {
       query = query.where('type').equals(type)
+    }
+
+    if (guName) {
+      query = query.where('guName').equals(guName)
     }
 
     const result = await query.find()

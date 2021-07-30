@@ -54,6 +54,7 @@
       <v-col cols="12">
         <related-item-card-list
           :items="nearByItems"
+          :loaded="!loading"
           title="주변에 있는 폐기물"
           @onClickItem="onClickItem"
         />
@@ -62,11 +63,22 @@
       <v-col cols="12">
         <related-item-card-list
           :items="relatedItems"
+          :loaded="!loading"
           title="관련있는 폐기물"
           text-key="guName"
           @onClickItem="onClickItem"
         />
       </v-col>
+
+      <v-col cols="12">
+        <related-item-card-list
+          :items="sameGuItems"
+          :loaded="!loading"
+          title="같은 구에 있는 폐기물"
+          @onClickItem="onClickItem"
+        />
+      </v-col>
+
       <v-col cols="12">
         <v-card class="rounded-lg">
           <v-card-actions class="pa-4">
@@ -116,6 +128,8 @@ export default defineComponent({
 
     const nearByItems = ref<API.Trash[]>([])
     const relatedItems = ref<API.Trash[]>([])
+    const sameGuItems = ref<API.Trash[]>([])
+    const loading = ref<boolean>(false)
 
     const { id } = route.value.params
 
@@ -140,8 +154,8 @@ export default defineComponent({
         return
       }
 
-      const [lng, lat] = trash.value.coordinates
-      const { result } = await context.$axios.$get(`/api/trashes/coordinates/${lat}/${lng}`)
+      const [lng, lat] = trash.value?.coordinates
+      const { result } = await context.$axios.$get(encodeURI(`/api/trashes/coordinates/${lat}/${lng}`))
       nearByItems.value = (result as API.Trash[]).filter(({ _id }) => _id !== trash.value?._id)
     }
 
@@ -150,16 +164,32 @@ export default defineComponent({
         return
       }
 
-      const type = trash.value.type
+      const type = trash.value?.type
       const limit = 8
-      const { result } = await context.$axios.$get(`/api/trashes?type=${type}&limit=${limit}`)
+      const { result } = await context.$axios.$get(encodeURI(`/api/trashes?type=${type}&limit=${limit}`))
       relatedItems.value = (result as API.Trash[]).filter(({ _id }) => _id !== trash.value?._id)
+    }
+
+    const updateSameGuItems = async () => {
+      if (!trash.value) {
+        return
+      }
+
+      const guName = trash.value?.guName
+      const limit = 8
+      const { result } = await context.$axios.$get(encodeURI(`/api/trashes?guName=${guName}&limit=${limit}`))
+      sameGuItems.value = (result as API.Trash[]).filter(({ _id }) => _id !== trash.value?._id)
     }
 
     const { fetch } = useFetch(async () => {
       await updateItem()
-      await updateNearbyItems()
-      await updateRelatedItems()
+      loading.value = true
+      await Promise.all([
+        updateNearbyItems(),
+        updateRelatedItems(),
+        updateSameGuItems()
+      ])
+      loading.value = false
     })
 
     const onClickItem = (item: API.Trash) => {
@@ -170,8 +200,10 @@ export default defineComponent({
 
     return {
       trash,
+      loading,
       nearByItems,
       relatedItems,
+      sameGuItems,
       mapOptions,
       dateFormat,
       onClickItem

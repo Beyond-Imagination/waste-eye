@@ -1,22 +1,29 @@
 <template>
   <v-card class="rounded-lg">
-    <v-card-title>
-      {{ title }}
-    </v-card-title>
-    <v-card-actions class="px-4 pt-0">
-      <div v-if="items.length > 0" class="scrollable">
-        <template v-for="(item ,index) in items">
-          <image-card
-            :key="`${index}-image-card`"
-            :item="item"
-            :text-key="textKey"
-            class="mb-2"
-            @click="onClickItem(item)"
-          />
-        </template>
-      </div>
-      <no-item-card v-else />
-    </v-card-actions>
+    <template v-if="loaded">
+      <v-card-title>
+        {{ title }}
+      </v-card-title>
+      <v-card-actions class="px-4 pt-0">
+        <div v-if="items.length > 0" class="scrollable">
+          <template v-for="(item ,index) in items">
+            <image-card
+              :key="`${index}-image-card`"
+              :item="item"
+              :text-key="textKey"
+              class="mb-2"
+              @click="onClickItem(item)"
+            />
+          </template>
+        </div>
+        <no-item-card v-else />
+      </v-card-actions>
+    </template>
+    <v-skeleton-loader
+      v-else
+      type="title, card"
+      height="140"
+    />
   </v-card>
 </template>
 
