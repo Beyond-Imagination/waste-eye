@@ -32,6 +32,10 @@ export default {
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
+  server: {
+    port: 9000
+  },
+
   //  Server Middlewares
   serverMiddleware: [
     { path: '/api', handler: '~/api/index.ts' }
@@ -59,7 +63,11 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    proxy: {
+      '/api/': { target: 'https://dev.eggplantiny.com', pathRewrite: { '^/api/': '' } }
+    }
+  },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
