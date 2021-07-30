@@ -4,11 +4,14 @@
     flat
     outlined
     dark
-    height="100"
+    height="80"
     color="primary"
     class="elevation-5 app-bar"
   >
-    <v-row>
+    <v-row
+      class="mx-auto"
+      style="max-width: 800px;"
+    >
       <v-col cols="12">
         <h2 class="app-bar-title">
           Wasteye

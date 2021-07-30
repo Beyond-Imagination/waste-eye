@@ -34,14 +34,16 @@
             />
           </naver-maps>
         </client-only>
+      </v-col>
+      <v-col>
         <v-card-text class="text-body-1 pa-4 mt-6 rounded-lg elevation-3">
-          <p class="mb-0">
+          <p class="mb-0 heading font-weight-bold">
             발견장소
           </p>
           <p>
             {{ trash.address }}
           </p>
-          <p class="mb-0">
+          <p class="mb-0 heading font-weight-bold">
             날짜
           </p>
           <p class="mb-0">
@@ -140,7 +142,7 @@ export default defineComponent({
 
       const [lng, lat] = trash.value.coordinates
       const { result } = await context.$axios.$get(`/api/trashes/coordinates/${lat}/${lng}`)
-      nearByItems.value = result as API.Trash[]
+      nearByItems.value = (result as API.Trash[]).filter(({ _id }) => _id !== trash.value?._id)
     }
 
     const updateRelatedItems = async () => {
@@ -151,7 +153,7 @@ export default defineComponent({
       const type = trash.value.type
       const limit = 8
       const { result } = await context.$axios.$get(`/api/trashes?type=${type}&limit=${limit}`)
-      relatedItems.value = result as API.Trash[]
+      relatedItems.value = (result as API.Trash[]).filter(({ _id }) => _id !== trash.value?._id)
     }
 
     const { fetch } = useFetch(async () => {
