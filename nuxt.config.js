@@ -1,5 +1,20 @@
 import colors from 'vuetify/es5/util/colors'
 
+const isDevelopment = process.env.NODE_ENV === 'development'
+
+const appUrl = 'https://dev.eggplantiny.com'
+const port = isDevelopment ? 3000 : 9000
+
+function useProxy () {
+  if (isDevelopment) {
+    return {}
+  }
+
+  return {
+    '/api/': { target: appUrl, pathRewrite: { '^/api/': '' } }
+  }
+}
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -33,7 +48,7 @@ export default {
   components: true,
 
   server: {
-    port: 9000
+    port
   },
 
   //  Server Middlewares
@@ -64,9 +79,7 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    proxy: {
-      '/api/': { target: 'https://dev.eggplantiny.com', pathRewrite: { '^/api/': '' } }
-    }
+    proxy: useProxy()
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa

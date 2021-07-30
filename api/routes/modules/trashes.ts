@@ -3,7 +3,7 @@ import { Trashes } from '../../db/'
 
 const router = Router()
 
-const limit:number = 5
+const limit:number = 20
 
 router.get('/:latitude/:longitude', async (req, res) => {
   const { latitude, longitude } = req.params

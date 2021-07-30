@@ -17,69 +17,15 @@
           />
         </template>
       </naver-maps>
-      <v-dialog
+      <info-dialog
         v-model="models.infoDialog"
-        max-width="400"
-      >
-        <v-card
-          v-if="selected !== null"
-          class="rounded-lg"
-        >
-          <v-row no-gutters class="px-4 pt-4">
-            <v-col
-              cols="12"
-            >
-              <v-img
-                :src="selected.image"
-                :lazy-src="selected.thumbnail"
-                max-width="400"
-                width="100%"
-                class="rounded-lg elevation-3 mx-auto"
-              />
-            </v-col>
-            <v-col
-              cols="12"
-            >
-              <v-card-title class="justify-center">
-                {{ selected.type }}
-              </v-card-title>
-              <v-card-subtitle class="text-center">
-                <p class="mb-0">
-                  발견일시 {{ formatDate(selected.createdAt) }}
-                </p>
-                <p class="mb-0">
-                  {{ selected.address }}
-                </p>
-                <p class="mb-0">
-                  {{ selected.guName }}
-                </p>
-              </v-card-subtitle>
-            </v-col>
-            <v-col cols="12">
-              <v-btn
-                text
-                block
-                @click="onClickOpenNaverMap"
-              >
-                네이버 지도에서 열기
-              </v-btn>
-            </v-col>
-          </v-row>
-          <v-card-actions class="pb-4">
-            <v-btn
-              block
-              color="primary"
-              @click="models.infoDialog = false"
-            >
-              닫기
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+        :selected="selected"
+        @onClickNaverMap="onClickOpenNaverMap"
+      />
       <v-btn
         fab
         fixed
-        top
+        bottom
         right
         color="secondary"
         @click="onClickSearch"
@@ -96,10 +42,9 @@
 import {
   ref,
   useContext,
-  defineComponent,
-  reactive
+  defineComponent, reactive
 } from '@nuxtjs/composition-api'
-import moment from 'moment'
+import InfoDialog from '~/components/molecules/Dialogs/InfoDialog.vue'
 
 import { API } from '~/types'
 
@@ -109,6 +54,9 @@ function getGeolocation (): Promise<GeolocationPosition> {
 
 export default defineComponent({
   name: 'Index',
+  components: {
+    InfoDialog
+  },
   layout: 'FullScreen',
   setup () {
     const context = useContext()
@@ -124,7 +72,7 @@ export default defineComponent({
     const items = ref<API.Trash[]>([])
     const models = reactive({
       infoDialog: false,
-      imageLoaded: true
+      fab: false
     })
 
     // @ts-ignore
@@ -169,8 +117,8 @@ export default defineComponent({
       updateCoordinate(lat, lng)
     }
 
-    const onClickOpenNaverMap = () => {
-      const searchUrl = `https://map.naver.com/v5/search/${selected.value?.address}`
+    const onClickOpenNaverMap = (item: API.Trash) => {
+      const searchUrl = `https://map.naver.com/v5/search/${item.address}`
       window.open(searchUrl)
     }
 
@@ -178,15 +126,12 @@ export default defineComponent({
 
     }
 
-    const formatDate = (date: Date) => moment(date).format('YYYY년 MM월 DD일')
-
     return {
       selected,
       items,
       maps,
       mapOptions,
       models,
-      formatDate,
       onLoad,
       onClickMarker,
       onClickMap,

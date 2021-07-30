@@ -6,7 +6,6 @@
         class="mx-auto"
         style="max-width: 1200px"
       >
-        <page-bar />
         <Nuxt />
       </v-container>
     </v-main>
@@ -16,12 +15,10 @@
 <script>
 import { defineComponent } from '@nuxtjs/composition-api'
 import AppBar from '~/components/atoms/AppBar'
-import PageBar from '~/components/molecules/PageBar'
 
 export default defineComponent({
   components: {
-    AppBar,
-    PageBar
+    AppBar
   }
 })
 </script>
