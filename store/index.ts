@@ -2,55 +2,34 @@ import { GetterTree, ActionTree, MutationTree } from 'vuex'
 import { API } from '~/types'
 
 export interface State {
-  sizeInfo: API.Size,
-  items: API.Trash[],
-  fetched: boolean
+  cctvGroupList: API.CctvGroup[]
 }
 
-export interface Params {
-  page?: number
-}
-
-export const state = () => ({
-  sizeInfo: {
-    size: 0,
-    pages: 0,
-    limit: 0
-  },
-  items: [],
-  fetched: false
+export const state = (): State => ({
+  cctvGroupList: []
 })
 
 export type RootState = ReturnType<typeof state>
 
 export const mutations: MutationTree<RootState> = {
-  UPDATE_SIZE_INFO (state: State, sizeInfo: API.Size) {
-    state.sizeInfo = sizeInfo
-  },
-  UPDATE_ITEMS (state: State, items: API.Trash[]) {
-    if (!state.fetched) {
-      state.fetched = true
-      state.items = []
-    }
-    state.items.push(...items)
+  UPDATE_CCTV_GROUP_LIST (state: State, itemList: API.CctvGroup[]) {
+    state.cctvGroupList = itemList
   }
 }
 
 export const actions: ActionTree<RootState, RootState> = {
-  async fetchSize ({ commit }) {
-    const { result } = await this.$axios.$get('/api/trashes/size')
-    commit('UPDATE_SIZE_INFO', result)
+  async fetchCctvGroupList ({ commit }) {
+    const { result } = await this.$axios.$get('/api/cctv')
+    commit('UPDATE_CCTV_GROUP_LIST', result as API.CctvGroup[])
   },
-  async fetchItems ({ commit }, params: Params = { page: 1 }) {
-    const { page } = params
-    const { result } = await this.$axios.$get(`/api/trashes?page=${page}`)
-
-    commit('UPDATE_ITEMS', result)
+  async nuxtServerInit (context) {
+    if (context.rootGetters.cctvGroupList.length === 0) {
+      console.log('update cctv group list')
+      await context.dispatch('fetchCctvGroupList')
+    }
   }
 }
 
 export const getters: GetterTree<RootState, RootState> = {
-  sizeInfo: state => state.sizeInfo,
-  items: state => Array.from(new Set(state.items).values()),
-  ready: state => state.fetched
+  cctvGroupList: state => state.cctvGroupList
 }

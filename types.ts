@@ -43,9 +43,9 @@ export declare namespace API {
     updatedAt: Date
   }
 
-  interface Cctv {
+  interface CctvGroup {
     key: string,
-    size: string,
+    size: number,
     items: Trash[]
   }
 
