@@ -43,6 +43,12 @@ export declare namespace API {
     updatedAt: Date
   }
 
+  interface Cctv {
+    key: string,
+    size: string,
+    items: Trash[]
+  }
+
   interface Size {
     size: number,
     pages: number,
