@@ -22,10 +22,9 @@ export const actions: ActionTree<RootState, RootState> = {
     const { result } = await this.$axios.$get('/api/cctv')
     commit('UPDATE_CCTV_GROUP_LIST', result as API.CctvGroup[])
   },
-  async nuxtServerInit (context) {
-    if (context.rootGetters.cctvGroupList.length === 0) {
-      console.log('update cctv group list')
-      await context.dispatch('fetchCctvGroupList')
+  async nuxtServerInit ({ rootGetters, dispatch }) {
+    if (rootGetters.cctvGroupList.length === 0) {
+      await dispatch('fetchCctvGroupList')
     }
   }
 }

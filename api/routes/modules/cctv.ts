@@ -8,7 +8,7 @@ interface ItemMap {
   [key: string]: API.Trash[]
 }
 
-let cached: API.CctvGroup[] = []
+let cached: ItemMap = {}
 
 async function fetchCache () {
   const query = Trashes.find().sort({ createdAt: -1 })
@@ -23,16 +23,12 @@ async function fetchCache () {
     result[data.guName].push(data)
   }
 
-  cached = Object.keys(result).map(key => ({
-    key,
-    size: result[key].length,
-    items: result[key]
-  }))
+  cached = result
 }
 
 router.get('/', async (_req, res) => {
   try {
-    if (cached.length === 0) {
+    if (Object.keys(cached).length === 0) {
       await fetchCache()
     } else {
       console.log('cache hit!')
@@ -41,7 +37,10 @@ router.get('/', async (_req, res) => {
     res.json({
       error: null,
       message: 'success',
-      result: cached
+      result: Object.keys(cached).map(key => ({
+        key,
+        size: cached[key].length
+      }))
     })
   } catch (error) {
     res
@@ -52,6 +51,37 @@ router.get('/', async (_req, res) => {
         result: null
       })
   }
+})
+
+router.get('/:key', async (req, res) => {
+  const { key } = req.params
+  if (!key) {
+    return res.status(400).json({
+      result: null,
+      message: '파라미터 [key]는 반드시 필요합니다.',
+      status: 400
+    })
+  } else {
+    console.log('cache hit!')
+  }
+
+  if (Object.keys(cached).length === 0) {
+    await fetchCache()
+  }
+
+  if (!cached[key]) {
+    return res.status(400).json({
+      result: null,
+      message: '잘못된 key 입니다.',
+      status: 400
+    })
+  }
+
+  res.status(200).json({
+    result: cached[key],
+    message: 'success',
+    status: 200
+  })
 })
 
 export default {

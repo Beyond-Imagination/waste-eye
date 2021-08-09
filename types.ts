@@ -46,7 +46,7 @@ export declare namespace API {
   interface CctvGroup {
     key: string,
     size: number,
-    items: Trash[]
+    items?: Trash[]
   }
 
   interface Size {
