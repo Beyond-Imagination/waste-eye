@@ -41,7 +41,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '~/plugins/vueNaverMaps.client.js'
+    '~/plugins/vueNaverMaps.client.js',
+    { src: '~/plugins/vueKakaoSdk.js', mode: 'client' }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

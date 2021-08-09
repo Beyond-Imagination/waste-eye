@@ -7,6 +7,7 @@ const trashSchema = new mongoose.Schema({
   address: { type: String, required: true },
   guName: { type: String, required: true },
   image: { type: String, required: true },
+  lowImage: { type: String, required: true },
   thumbnail: { type: String, required: true },
   createdAt: { type: Date, required: true },
   updatedAt: { type: Date, required: true }

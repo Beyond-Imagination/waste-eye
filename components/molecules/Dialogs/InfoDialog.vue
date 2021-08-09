@@ -13,7 +13,7 @@
         >
           <v-img
             :src="selected.image"
-            :lazy-src="selected.thumbnail"
+            :lazy-src="selected.lowImage"
             max-width="400"
             width="100%"
             class="rounded-lg elevation-3 mx-auto"

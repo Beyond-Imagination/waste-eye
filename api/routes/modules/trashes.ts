@@ -1,9 +1,57 @@
 import { Router } from 'express'
 import { Trashes } from '../../db/'
+import dataJson from '../../../data.json'
+import { API } from '~/types'
 
 const router = Router()
 
 const _limit:number = 20
+
+function genImageUrl (fileName: string, folder: string, prefix: string = '') {
+  const baseUrl = 'https://wasteye.s3.ap-northeast-2.amazonaws.com'
+  return encodeURI(`${baseUrl}/${folder}/${prefix}${fileName}`)
+}
+
+router.get('/all', async (_req, res) => {
+  const data = dataJson as API.Item[]
+
+  let success = 0
+  let failed = 0
+  for await (const item of data) {
+    try {
+      const trash = new Trashes({
+        fileName: item.fileName,
+        type: item.type,
+        coordinates: [item.coordinates.longitude, item.coordinates.latitude],
+        address: item.address,
+        guName: item.guName,
+        image: genImageUrl(item.fileName, 'images'),
+        lowImage: genImageUrl(item.fileName, 'low_images'),
+        thumbnail: genImageUrl(item.fileName, 'thumbnails', 'thumbnail_'),
+        createdAt: new Date(),
+        updatedAt: new Date()
+      })
+
+      await trash.save()
+      success += 1
+      if (success % 10 === 0) {
+        console.log(`${success} success!`)
+      }
+    } catch (e) {
+      console.error(e)
+      failed += 1
+    }
+  }
+
+  res.status(200).json({
+    error: null,
+    message: 'success',
+    result: {
+      success,
+      failed
+    }
+  })
+})
 
 router.get('/:id', async (req, res) => {
   const { id } = req.params

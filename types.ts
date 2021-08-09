@@ -35,6 +35,7 @@ export declare namespace API {
     _id?: string
     image: string
     thumbnail: string
+    lowImage: string
     coordinates: number[]
     address: string
     guName: string

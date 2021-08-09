@@ -132,6 +132,7 @@ export default defineComponent({
     }
 
     const onClickSearch = () => {
+      console.log(window)
     }
 
     return {

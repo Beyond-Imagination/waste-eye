@@ -14,7 +14,7 @@
         <v-img
           max-width="500"
           :src="trash.image"
-          :lazy-src="trash.thumbnail"
+          :lazy-src="trash.lowImage"
           class="elevation-3 rounded-lg"
         />
       </v-col>
