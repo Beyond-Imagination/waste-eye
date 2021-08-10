@@ -1,22 +1,22 @@
 import express, { Application } from 'express'
-import mongoose from 'mongoose'
+import morgan from 'morgan'
+
+import './plugins/mongoose.plugin'
 
 import routes from './routes/'
 import { Server } from '~/types'
-
-const URI = process.env.DB_URI || 'ERROR'
-
-mongoose.connect(URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
+import { errorHandler } from '~/api/middlewares/error.middleware'
 
 const app: Application = express()
 
-//  Body Parser
+//  Add Middlewares
 app.use(express.json())
+app.use(morgan('dev'))
 
 //  Router
 routes.forEach((route: Server.IRoute) => app.use(`/${route.name}`, route.router))
+
+//  Error Handler
+app.use(errorHandler)
 
 export default app

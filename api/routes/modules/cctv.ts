@@ -1,6 +1,11 @@
 import { Router } from 'express'
+import { param, validationResult } from 'express-validator'
 import { Trashes } from '../../db/'
 import { API } from '~/types'
+import wrapAsync from '~/api/middlewares/async.middleware'
+import { success } from '~/api/helper/response'
+import ParamsError from '~/api/errors/params.error'
+import WrongKeyError from '~/api/errors/cctv.error'
 
 const router = Router()
 
@@ -11,6 +16,8 @@ interface ItemMap {
 let cached: ItemMap = {}
 
 async function fetchCache () {
+  console.log('fetching cache.')
+
   const query = Trashes.find().sort({ createdAt: -1 })
   const dataList = await query.find() as API.Trash[]
 
@@ -26,63 +33,43 @@ async function fetchCache () {
   cached = result
 }
 
-router.get('/', async (_req, res) => {
-  try {
+router.get('/', wrapAsync(
+  async (_req, res) => {
     if (Object.keys(cached).length === 0) {
       await fetchCache()
-    } else {
-      console.log('cache hit!')
     }
 
-    res.json({
-      error: null,
-      message: 'success',
-      result: Object.keys(cached).map(key => ({
+    success(res, Object
+      .keys(cached)
+      .map(key => ({
         key,
         size: cached[key].length
       }))
-    })
-  } catch (error) {
-    res
-      .status(400)
-      .json({
-        error,
-        message: error.message,
-        result: null
-      })
+    )
   }
-})
+))
 
-router.get('/:key', async (req, res) => {
-  const { key } = req.params
-  if (!key) {
-    return res.status(400).json({
-      result: null,
-      message: '파라미터 [key]는 반드시 필요합니다.',
-      status: 400
-    })
-  } else {
-    console.log('cache hit!')
-  }
+router.get('/:key',
+  param('key').exists(),
+  wrapAsync(async (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      throw new ParamsError(errors)
+    }
 
-  if (Object.keys(cached).length === 0) {
-    await fetchCache()
-  }
+    const { key } = req.params
 
-  if (!cached[key]) {
-    return res.status(400).json({
-      result: null,
-      message: '잘못된 key 입니다.',
-      status: 400
-    })
-  }
+    if (Object.keys(cached).length === 0) {
+      await fetchCache()
+    }
 
-  res.status(200).json({
-    result: cached[key],
-    message: 'success',
-    status: 200
+    if (!cached[key]) {
+      throw new WrongKeyError()
+    }
+
+    success(res, cached[key])
   })
-})
+)
 
 export default {
   name: 'cctv',

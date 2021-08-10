@@ -28,7 +28,8 @@
       "@nuxt/types",
       "@nuxtjs/axios",
       "@types/node",
-      "@types/kakao-js-sdk"
+      "@types/kakao-js-sdk",
+      "@types/morgan"
     ]
   },
   "exclude": [

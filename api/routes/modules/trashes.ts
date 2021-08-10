@@ -1,37 +1,40 @@
 import { Router } from 'express'
+import { body, param, validationResult } from 'express-validator'
 import { Trashes } from '../../db/'
+import wrapAsync from '~/api/middlewares/async.middleware'
+import { success } from '~/api/helper/response'
+import ParamsError from '~/api/errors/params.error'
 
 const router = Router()
 
 const _limit:number = 20
 
-router.get('/:id', async (req, res) => {
-  const { id } = req.params
+router.get('/:id',
+  param('id').exists(),
+  wrapAsync(async (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      throw new ParamsError(errors)
+    }
 
-  try {
+    const { id } = req.params
     const result = await Trashes.findById(id)
+    success(res, result)
+  })
+)
 
-    res.json({
-      error: null,
-      message: 'success',
-      result
-    })
-  } catch (error) {
-    res
-      .status(400)
-      .json({
-        error,
-        message: error.message,
-        result: null
-      })
-  }
-})
+router.get('/coordinates/:latitude/:longitude',
+  param('latitude').exists().isNumeric(),
+  param('longitude').exists().isNumeric(),
+  wrapAsync(async (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      throw new ParamsError(errors)
+    }
 
-router.get('/coordinates/:latitude/:longitude', async (req, res) => {
-  const { latitude, longitude } = req.params
-  const radius = req.query.radius || 500
+    const { latitude, longitude } = req.params
+    const radius = req.query.radius || 500
 
-  try {
     const result = await Trashes.find({
       coordinates: {
         $near: {
@@ -44,21 +47,9 @@ router.get('/coordinates/:latitude/:longitude', async (req, res) => {
       }
     })
 
-    res.json({
-      error: null,
-      message: 'success',
-      result
-    })
-  } catch (error) {
-    res
-      .status(400)
-      .json({
-        error,
-        message: error.message,
-        result: null
-      })
-  }
-})
+    success(res, result)
+  })
+)
 
 router.get('/', async (req, res) => {
   let page:number = Number(req.query.page || 1)
@@ -70,65 +61,28 @@ router.get('/', async (req, res) => {
     page = 1
   }
 
-  try {
-    let query = Trashes.find().skip((page - 1) * limit).limit(limit).sort({ createdAt: -1 })
+  let query = Trashes.find().skip((page - 1) * limit).limit(limit).sort({ createdAt: -1 })
 
-    if (type) {
-      query = query.where('type').equals(type)
-    }
-
-    if (guName) {
-      query = query.where('guName').equals(guName)
-    }
-
-    const result = await query.find()
-
-    res.json({
-      error: null,
-      message: 'success',
-      result
-    })
-  } catch (error) {
-    res
-      .status(400)
-      .json({
-        error,
-        message: error.message,
-        result: null
-      })
+  if (type) {
+    query = query.where('type').equals(type)
   }
+
+  if (guName) {
+    query = query.where('guName').equals(guName)
+  }
+
+  const result = await query.find()
+
+  success(res, result)
 })
 
-router.get('/size', async (req, res) => {
-  const limit:number = Number(req.query.limit || _limit)
-  try {
-    const size = await Trashes.countDocuments()
+router.post('/',
+  body('type').exists(),
+  body('address').exists(),
+  body('image').exists(),
+  wrapAsync(async (req, res) => {
+    const { type, address, image } = req.body
 
-    const pages = size / limit
-
-    res.json({
-      error: null,
-      message: 'success',
-      result: {
-        size,
-        limit,
-        pages
-      }
-    })
-  } catch (error) {
-    res
-      .status(400)
-      .json({
-        error,
-        message: error.message,
-        result: null
-      })
-  }
-})
-
-router.post('/', async (req, res) => {
-  const { type, address, image } = req.body
-  try {
     const doc = new Trashes({
       type,
       address,
@@ -138,41 +92,25 @@ router.post('/', async (req, res) => {
     })
 
     const result = await doc.save()
-    res.json({
-      error: null,
-      message: 'success',
-      result
-    })
-  } catch (error) {
-    res
-      .status(400)
-      .json({
-        error,
-        message: error.message,
-        result: null
-      })
-  }
-})
+    success(res, result)
+  })
+)
 
-router.delete('/:id', async (req, res) => {
-  const { id } = req.params
-  try {
-    const result = await Trashes.findByIdAndDelete(id)
-    res.json({
-      error: null,
-      message: 'success',
-      result
-    })
-  } catch (error) {
-    res
-      .status(400)
-      .json({
-        error,
-        message: error.message,
-        result: null
-      })
-  }
-})
+router.delete('/:id',
+  param('id').exists(),
+  wrapAsync(
+    async (req, res) => {
+      const errors = validationResult(req)
+      if (!errors.isEmpty()) {
+        throw new ParamsError(errors)
+      }
+
+      const { id } = req.params
+      const result = await Trashes.findByIdAndDelete(id)
+      success(res, result)
+    }
+  )
+)
 
 export default {
   name: 'trashes',

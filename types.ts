@@ -8,6 +8,13 @@ export declare namespace Server {
 }
 
 export declare namespace API {
+  export interface Response {
+    message: string | null
+    success: boolean
+    status: number
+    result: any
+  }
+
   interface Result {
     error: string | null,
     message: string | null,

@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
+    "dev": "node -r tsconfig-paths/register ./node_modules/nuxt/bin/nuxt.js",
+    "start": "node -r tsconfig-paths/register ./node_modules/nuxt/bin/nuxt.js start",
     "build": "nuxt build",
-    "start": "nuxt start",
     "generate": "nuxt generate",
     "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
     "lint": "yarn lint:js",
@@ -17,8 +17,10 @@
     "@types/express": "^4.17.13",
     "core-js": "^3.15.1",
     "express": "^4.17.1",
+    "express-validator": "^6.12.1",
     "moment": "^2.29.1",
     "mongoose": "^5.13.3",
+    "morgan": "^1.10.0",
     "nuxt": "^2.15.7",
     "vue-kakao-sdk": "^0.2.0",
     "vue-naver-maps": "^0.14.2",
@@ -34,6 +36,7 @@
     "@nuxtjs/eslint-config-typescript": "^6.0.1",
     "@nuxtjs/eslint-module": "^3.0.2",
     "@nuxtjs/vuetify": "^1.12.1",
+    "@types/morgan": "^1.9.3",
     "@vue/test-utils": "^1.2.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^27.0.5",
@@ -42,6 +45,7 @@
     "eslint-plugin-vue": "^7.12.1",
     "jest": "^27.0.5",
     "ts-jest": "^27.0.3",
+    "tsconfig-paths": "^3.10.1",
     "vue-jest": "^3.0.4"
   }
 }
