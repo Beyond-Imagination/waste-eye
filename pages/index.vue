@@ -132,7 +132,7 @@ export default defineComponent({
     }
 
     const onClickSearch = () => {
-      console.log(window)
+      router.push('/CCTV')
     }
 
     return {

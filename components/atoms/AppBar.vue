@@ -12,10 +12,22 @@
       class="mx-auto"
       style="max-width: 800px;"
     >
-      <v-col cols="12">
+      <v-col cols="12" class="d-flex justify-space-between align-center">
         <h2 class="app-bar-title">
           Wasteye
         </h2>
+        <div class="d-flex">
+          <v-btn
+            to="/"
+            class="mr-2"
+            text
+          >
+            폐기물 지도
+          </v-btn>
+          <v-btn text to="/CCTV">
+            CCTV 현황
+          </v-btn>
+        </div>
       </v-col>
     </v-row>
   </v-app-bar>

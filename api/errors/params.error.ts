@@ -1,7 +1,7 @@
 import { Result, ValidationError } from 'express-validator'
 import HttpError from '~/api/errors/http.error'
 
-export default class ParamsError extends HttpError {
+export class ParamsError extends HttpError {
   constructor (validationError: Result<ValidationError>) {
     const parameters = validationError.array().map(error => error.param).join(', ')
     const message = `파라미터 [${parameters}] 는 반드시 필요합니다.`

@@ -3,7 +3,7 @@ import { body, param, validationResult } from 'express-validator'
 import { Trashes } from '../../db/'
 import wrapAsync from '~/api/middlewares/async.middleware'
 import { success } from '~/api/helper/response'
-import ParamsError from '~/api/errors/params.error'
+import { ParamsError } from '~/api/errors/params.error'
 
 const router = Router()
 

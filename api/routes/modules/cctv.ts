@@ -4,8 +4,8 @@ import { Trashes } from '../../db/'
 import { API } from '~/types'
 import wrapAsync from '~/api/middlewares/async.middleware'
 import { success } from '~/api/helper/response'
-import ParamsError from '~/api/errors/params.error'
-import WrongKeyError from '~/api/errors/cctv.error'
+import { ParamsError } from '~/api/errors/params.error'
+import { WrongKeyError } from '~/api/errors/cctv.error'
 
 const router = Router()
 

@@ -3,7 +3,7 @@
     v-if="!!trash"
     flat
   >
-    <v-card-title class="justify-center justify-sm-start">
+    <v-card-title class="justify-center justify-sm-start rounded-lg elevation-3 mb-3">
       <h3>{{ trash.type }}</h3>
     </v-card-title>
     <v-row>
@@ -36,7 +36,7 @@
         </client-only>
       </v-col>
       <v-col>
-        <v-card-text class="text-body-1 pa-4 mt-6 rounded-lg elevation-3">
+        <v-card-text class="text-body-1 pa-4 rounded-lg elevation-3">
           <p class="mb-0 heading font-weight-bold">
             발견장소
           </p>

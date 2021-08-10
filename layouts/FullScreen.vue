@@ -1,12 +1,18 @@
 <template>
   <v-app>
+    <app-bar />
     <Nuxt />
   </v-app>
 </template>
 
 <script>
+import AppBar from '~/components/atoms/AppBar'
+
 export default {
-  name: 'FullScreen'
+  name: 'FullScreen',
+  components: {
+    AppBar
+  }
 }
 </script>
 
