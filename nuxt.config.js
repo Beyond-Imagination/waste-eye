@@ -2,8 +2,8 @@ import colors from 'vuetify/es5/util/colors'
 
 const isDevelopment = process.env.NODE_ENV === 'development'
 
-const appUrl = 'https://dev.eggplantiny.com'
-const port = isDevelopment ? 3000 : 9000
+const appUrl = 'https://wasteye.eggp.io'
+const port = 3000
 
 function useProxy () {
   if (isDevelopment) {
