@@ -3,7 +3,7 @@
     class="pa-4 footer justify-center mt-8"
     color="white"
   >
-    All rights reserved <a href="https://github.com/orgs/Beyond-Imagination/teams"> Beyond Imagination.</a> 2020. 7
+    All rights reserved <a href="https://github.com/orgs/Beyond-Imagination/teams"> Beyond Imagination.</a> 2021. 10
   </v-footer>
 </template>
 
